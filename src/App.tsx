@@ -3,7 +3,6 @@ import CarpetCalculator from './CarpetCalculator';
 import DateSlotPicker from './DateSlotPicker';
 import OrderModal from './OrderModal';
 import SuccessModal from './SuccessModal';
-import SettingsModal from './SettingsModal';
 import { Carpet, OrderData } from './types';
 import { createEmptyCarpet, DELIVERY_PRICE } from './carpetCalculator';
 import { createBitrixLead } from './bitrixApi';
@@ -16,7 +15,6 @@ export default function App() {
   
   const [orderModalOpen, setOrderModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
   
   const [isLoading, setIsLoading] = useState(false);
   const [orderError, setOrderError] = useState('');
@@ -100,7 +98,7 @@ export default function App() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-center">
           <div className="flex items-center gap-3">
             <span className="text-3xl">🧹</span>
             <div>
@@ -108,13 +106,6 @@ export default function App() {
               <p className="text-xs text-gray-500">Расчёт стоимости и заказ</p>
             </div>
           </div>
-          <button
-            onClick={() => setSettingsOpen(true)}
-            className="p-2 rounded-lg hover:bg-gray-100 transition"
-            title="Настройки Битрикс24"
-          >
-            <span className="text-xl">⚙️</span>
-          </button>
         </div>
       </header>
 
@@ -213,18 +204,6 @@ export default function App() {
         leadId={lastLeadId}
         onClose={handleSuccessClose}
       />
-
-      <SettingsModal
-        isOpen={settingsOpen}
-        onClose={() => setSettingsOpen(false)}
-      />
-
-      {/* Webhook info */}
-      <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-blue-50 border border-blue-200 text-blue-800 px-4 py-2 rounded-xl shadow-lg text-sm flex items-center gap-2 z-30">
-        <span>🔗</span>
-        <span>Вебхук Битрикс24 подключён</span>
-        <button onClick={() => setSettingsOpen(true)} className="underline font-semibold ml-2">Изменить</button>
-      </div>
     </div>
   );
 }
