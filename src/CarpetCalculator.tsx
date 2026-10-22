@@ -232,6 +232,22 @@ export default function CarpetCalculator({ carpets, delivery, onCarpetsChange, o
           </div>
           <span className="text-lg font-bold text-gray-800">{DELIVERY_PRICE.toLocaleString('ru-RU')} ₽</span>
         </label>
+
+        {/* Предупреждение при снятой галочке */}
+        {!delivery && (
+          <div className="mt-4 p-4 bg-amber-50 border-l-4 border-amber-400 rounded-r-xl">
+            <div className="flex items-start gap-2">
+              <span className="text-xl flex-shrink-0">⚠️</span>
+              <div className="text-sm text-amber-900">
+                <p className="font-semibold mb-1">Внимание! Вы не заказали доставку.</p>
+                <p>
+                  В этом случае Вам необходимо доставить и забрать ковры по адресу:{' '}
+                  <span className="font-semibold">ул. Багрицкого, 10 корпус 2, Москва</span>.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Итого */}

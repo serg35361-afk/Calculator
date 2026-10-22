@@ -1,17 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface Props {
   isOpen: boolean;
+  delivery: boolean;
   onClose: () => void;
   onSubmit: (name: string, phone: string, address: string) => void;
   isLoading: boolean;
 }
 
-export default function OrderModal({ isOpen, onClose, onSubmit, isLoading }: Props) {
+export default function OrderModal({ isOpen, delivery, onClose, onSubmit, isLoading }: Props) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Сброс при открытии
+  useEffect(() => {
+    if (isOpen) {
+      setName('');
+      setPhone('');
+      setAddress('');
+      setErrors({});
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -19,7 +30,8 @@ export default function OrderModal({ isOpen, onClose, onSubmit, isLoading }: Pro
     const newErrors: Record<string, string> = {};
     if (!name.trim()) newErrors.name = 'Введите имя';
     if (!phone.trim()) newErrors.phone = 'Введите телефон';
-    if (!address.trim()) newErrors.address = 'Введите адрес';
+    // Адрес обязателен только если заказана доставка
+    if (delivery && !address.trim()) newErrors.address = 'Введите адрес доставки';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -40,7 +52,7 @@ export default function OrderModal({ isOpen, onClose, onSubmit, isLoading }: Pro
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={handleClose}>
-      <div className="bg-white rounded-2xl shadow-2xl p-6 md:p-8 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-white rounded-2xl shadow-2xl p-6 md:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
             <span className="text-2xl">📝</span> Оформление заказа
@@ -54,6 +66,7 @@ export default function OrderModal({ isOpen, onClose, onSubmit, isLoading }: Pro
         </div>
 
         <div className="space-y-4">
+          {/* Имя */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
               Имя <span className="text-red-500">*</span>
@@ -70,6 +83,7 @@ export default function OrderModal({ isOpen, onClose, onSubmit, isLoading }: Pro
             {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
           </div>
 
+          {/* Телефон */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
               Телефон <span className="text-red-500">*</span>
@@ -86,15 +100,16 @@ export default function OrderModal({ isOpen, onClose, onSubmit, isLoading }: Pro
             {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
           </div>
 
+          {/* Адрес */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
-              Адрес <span className="text-red-500">*</span>
+              Адрес {delivery ? <span className="text-red-500">*</span> : <span className="text-gray-400 font-normal">(необязательно)</span>}
             </label>
             <input
               type="text"
               value={address}
               onChange={(e) => { setAddress(e.target.value); setErrors(prev => ({ ...prev, address: '' })); }}
-              placeholder="Адрес для забора ковров"
+              placeholder={delivery ? 'Адрес для забора ковров' : 'Ваш адрес (если хотите оставить комментарий)'}
               className={`w-full p-3 border-2 rounded-xl focus:outline-none transition ${
                 errors.address ? 'border-red-300 focus:border-red-500' : 'border-gray-200 focus:border-blue-500'
               }`}
@@ -102,6 +117,23 @@ export default function OrderModal({ isOpen, onClose, onSubmit, isLoading }: Pro
             {errors.address && <p className="text-xs text-red-500 mt-1">{errors.address}</p>}
           </div>
 
+          {/* Предупреждение при отсутствии доставки */}
+          {!delivery && (
+            <div className="p-4 bg-amber-50 border-l-4 border-amber-400 rounded-r-xl">
+              <div className="flex items-start gap-2">
+                <span className="text-xl flex-shrink-0">⚠️</span>
+                <div className="text-sm text-amber-900">
+                  <p className="font-semibold mb-1">Внимание! Вы не заказали доставку.</p>
+                  <p>
+                    В этом случае Вам необходимо доставить и забрать ковры по адресу:{' '}
+                    <span className="font-semibold">ул. Багрицкого, 10 корпус 2, Москва</span>.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Кнопки */}
           <div className="pt-2 flex gap-3">
             <button
               onClick={handleClose}

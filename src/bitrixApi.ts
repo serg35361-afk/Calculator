@@ -70,7 +70,16 @@ export function formatOrderComment(data: OrderData): string {
   lines.push('--- КОНТАКТНЫЕ ДАННЫЕ ---');
   lines.push(`Имя: ${data.name}`);
   lines.push(`Телефон: ${data.phone}`);
-  lines.push(`Адрес: ${data.address}`);
+  
+  if (data.delivery) {
+    lines.push(`Адрес доставки: ${data.address}`);
+  } else {
+    lines.push(`Адрес: ${data.address || 'не указан'}`);
+    lines.push('');
+    lines.push('⚠️ ВНИМАНИЕ: Доставка НЕ заказана!');
+    lines.push('Клиент должен самостоятельно доставить и забрать ковры по адресу:');
+    lines.push('ул. Багрицкого, 10 корпус 2, Москва');
+  }
 
   return lines.join('\n');
 }

@@ -10,7 +10,7 @@ import { createBitrixLead } from './bitrixApi';
 
 export default function App() {
   const [carpets, setCarpets] = useState<Carpet[]>([createEmptyCarpet(1)]);
-  const [delivery, setDelivery] = useState(false);
+  const [delivery, setDelivery] = useState(true);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedSlot, setSelectedSlot] = useState('');
   
@@ -201,6 +201,7 @@ export default function App() {
       {/* Modals */}
       <OrderModal
         isOpen={orderModalOpen}
+        delivery={delivery}
         onClose={() => setOrderModalOpen(false)}
         onSubmit={handleOrderSubmit}
         isLoading={isLoading}

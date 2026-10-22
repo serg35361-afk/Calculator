@@ -43,8 +43,19 @@ export default function SuccessModal({ isOpen, orderData, leadId, onClose }: Pro
           {/* Доставка */}
           <div className="text-sm text-gray-600">
             <span className="font-medium text-gray-800">🚚 Доставка:</span>{' '}
-            {orderData.delivery ? `${DELIVERY_PRICE.toLocaleString('ru-RU')} ₽` : 'Нет'}
+            {orderData.delivery ? `${DELIVERY_PRICE.toLocaleString('ru-RU')} ₽` : 'Самовывоз'}
           </div>
+
+          {/* Предупреждение о самовывозе */}
+          {!orderData.delivery && (
+            <div className="p-3 bg-amber-50 border-l-4 border-amber-400 rounded-r-xl text-sm text-amber-900">
+              <p className="font-semibold mb-1">⚠️ Самовывоз</p>
+              <p>
+                Необходимо доставить и забрать ковры по адресу:{' '}
+                <span className="font-semibold">ул. Багрицкого, 10 корпус 2, Москва</span>.
+              </p>
+            </div>
+          )}
 
           {/* Дата и слот */}
           <div className="text-sm text-gray-600">
@@ -58,7 +69,12 @@ export default function SuccessModal({ isOpen, orderData, leadId, onClose }: Pro
           <div className="border-t border-gray-200 pt-3 space-y-1">
             <p className="text-sm text-gray-600"><span className="font-medium text-gray-800">👤 Имя:</span> {orderData.name}</p>
             <p className="text-sm text-gray-600"><span className="font-medium text-gray-800">📞 Телефон:</span> {orderData.phone}</p>
-            <p className="text-sm text-gray-600"><span className="font-medium text-gray-800">📍 Адрес:</span> {orderData.address}</p>
+            {orderData.delivery && orderData.address && (
+              <p className="text-sm text-gray-600"><span className="font-medium text-gray-800">📍 Адрес доставки:</span> {orderData.address}</p>
+            )}
+            {!orderData.delivery && orderData.address && (
+              <p className="text-sm text-gray-600"><span className="font-medium text-gray-800">📍 Адрес (комментарий):</span> {orderData.address}</p>
+            )}
           </div>
 
           {/* Итого */}
