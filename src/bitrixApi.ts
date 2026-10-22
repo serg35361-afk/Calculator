@@ -2,9 +2,10 @@ import { OrderData, Carpet } from './types';
 import { WASH_PRICES, SHAPES, DELIVERY_PRICE } from './carpetCalculator';
 
 const BITRIX_WEBHOOK_URL = 'BITRIX_WEBHOOK_URL';
+const DEFAULT_WEBHOOK_URL = 'https://b24-d4onxk.bitrix24.ru/rest/9/auaelktxao9c27ky/';
 
 export function getWebhookUrl(): string {
-  return localStorage.getItem(BITRIX_WEBHOOK_URL) || '';
+  return localStorage.getItem(BITRIX_WEBHOOK_URL) || DEFAULT_WEBHOOK_URL;
 }
 
 export function setWebhookUrl(url: string): void {

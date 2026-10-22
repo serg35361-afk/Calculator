@@ -6,7 +6,7 @@ import SuccessModal from './SuccessModal';
 import SettingsModal from './SettingsModal';
 import { Carpet, OrderData } from './types';
 import { createEmptyCarpet, DELIVERY_PRICE } from './carpetCalculator';
-import { createBitrixLead, getWebhookUrl } from './bitrixApi';
+import { createBitrixLead } from './bitrixApi';
 
 export default function App() {
   const [carpets, setCarpets] = useState<Carpet[]>([createEmptyCarpet(1)]);
@@ -218,14 +218,12 @@ export default function App() {
         onClose={() => setSettingsOpen(false)}
       />
 
-      {/* Webhook warning */}
-      {!getWebhookUrl() && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-amber-50 border border-amber-300 text-amber-800 px-4 py-2 rounded-xl shadow-lg text-sm flex items-center gap-2 z-30">
-          <span>⚠️</span>
-          <span>Настройте вебхук Битрикс24</span>
-          <button onClick={() => setSettingsOpen(true)} className="underline font-semibold ml-2">Настроить</button>
-        </div>
-      )}
+      {/* Webhook info */}
+      <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-blue-50 border border-blue-200 text-blue-800 px-4 py-2 rounded-xl shadow-lg text-sm flex items-center gap-2 z-30">
+        <span>🔗</span>
+        <span>Вебхук Битрикс24 подключён</span>
+        <button onClick={() => setSettingsOpen(true)} className="underline font-semibold ml-2">Изменить</button>
+      </div>
     </div>
   );
 }

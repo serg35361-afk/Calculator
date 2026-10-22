@@ -10,6 +10,14 @@ export default function SettingsModal({ isOpen, onClose }: Props) {
   const [url, setUrl] = useState(getWebhookUrl());
   const [saved, setSaved] = useState(false);
 
+  // Обновляем URL при открытии модалки
+  React.useEffect(() => {
+    if (isOpen) {
+      setUrl(getWebhookUrl());
+      setSaved(false);
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleSave = () => {
