@@ -1,16 +1,8 @@
 import { OrderData, Carpet } from './types';
 import { WASH_PRICES, SHAPES, DELIVERY_PRICE } from './carpetCalculator';
 
-const BITRIX_WEBHOOK_URL = 'BITRIX_WEBHOOK_URL';
-const DEFAULT_WEBHOOK_URL = 'https://b24-d4onxk.bitrix24.ru/rest/9/auaelktxao9c27ky/';
-
-export function getWebhookUrl(): string {
-  return localStorage.getItem(BITRIX_WEBHOOK_URL) || DEFAULT_WEBHOOK_URL;
-}
-
-export function setWebhookUrl(url: string): void {
-  localStorage.setItem(BITRIX_WEBHOOK_URL, url);
-}
+// URL вебхука Битрикс24 — задаётся только здесь, в коде
+const BITRIX_WEBHOOK_URL = 'https://b24-d4onxk.bitrix24.ru/rest/9/auaelktxao9c27ky/';
 
 function formatCarpetInfo(carpet: Carpet, index: number): string {
   const washInfo = WASH_PRICES[carpet.services.washType];
@@ -85,12 +77,6 @@ export function formatOrderComment(data: OrderData): string {
 }
 
 export async function createBitrixLead(data: OrderData): Promise<{ success: boolean; leadId?: number; error?: string }> {
-  const webhookUrl = getWebhookUrl();
-  
-  if (!webhookUrl) {
-    return { success: false, error: 'URL вебхука Битрикс24 не настроен. Откройте настройки (⚙️) и укажите вебхук.' };
-  }
-
   const comment = formatOrderComment(data);
 
   const leadFields = {
@@ -111,7 +97,7 @@ export async function createBitrixLead(data: OrderData): Promise<{ success: bool
   };
 
   try {
-    const response = await fetch(`${webhookUrl}/crm.lead.add.json`, {
+    const response = await fetch(`${BITRIX_WEBHOOK_URL}/crm.lead.add.json`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
